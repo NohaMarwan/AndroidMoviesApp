@@ -1,14 +1,17 @@
 package com.life.ammar.movies;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class MovieEntry {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
+public class MovieEntry extends RealmObject {
 private boolean adult;
+@Required
 private String backdropPath;
-private List<Integer> genreIds = new ArrayList<Integer>();
+@PrimaryKey
 private int id;
+@Required
 private String originalLanguage;
 private String originalTitle;
 private String overview;
@@ -19,17 +22,16 @@ private String title;
 private boolean video;
 private double voteAverage;
 private int voteCount;
-
+private int type; // 0 for popularity and 1 for votes
 
 public MovieEntry() {}
 
-public MovieEntry(boolean adult, String backdropPath, List<Integer> genreIds, int id,
+public MovieEntry(boolean adult, String backdropPath, int id,
                   String originalLanguage, String originalTitle, String overview,
                   double popularity, String posterPath, String releaseDate, String title,
-                  boolean video, double voteAverage, int voteCount) {
+                  boolean video, double voteAverage, int voteCount, int type) {
     this.adult = adult;
     this.backdropPath = backdropPath;
-    this.genreIds = genreIds;
     this.id = id;
     this.originalLanguage = originalLanguage;
     this.originalTitle = originalTitle;
@@ -41,6 +43,7 @@ public MovieEntry(boolean adult, String backdropPath, List<Integer> genreIds, in
     this.video = video;
     this.voteAverage = voteAverage;
     this.voteCount = voteCount;
+    this.type = type;
 }
 
 
@@ -53,36 +56,12 @@ public void setAdult(boolean adult) {
     this.adult = adult;
 }
 
-public MovieEntry withAdult(boolean adult) {
-    this.adult = adult;
-    return this;
-}
-
 public String getBackdropPath() {
     return backdropPath;
 }
 
 public void setBackdropPath(String backdropPath) {
     this.backdropPath = backdropPath;
-}
-
-public MovieEntry withBackdropPath(String backdropPath) {
-    this.backdropPath = backdropPath;
-    return this;
-}
-
-public List<Integer> getGenreIds() {
-    return genreIds;
-}
-
-
-public void setGenreIds(List<Integer> genreIds) {
-    this.genreIds = genreIds;
-}
-
-public MovieEntry withGenreIds(List<Integer> genreIds) {
-    this.genreIds = genreIds;
-    return this;
 }
 
 public int getId() {
@@ -94,234 +73,92 @@ public void setId(int id) {
     this.id = id;
 }
 
-public MovieEntry withId(int id) {
-    this.id = id;
-    return this;
-}
-
 
 public String getOriginalLanguage() {
-return originalLanguage;
+    return originalLanguage;
 }
-
-/**
-*
-* @param originalLanguage
-* The original_language
-*/
 public void setOriginalLanguage(String originalLanguage) {
-this.originalLanguage = originalLanguage;
+    this.originalLanguage = originalLanguage;
 }
 
-public MovieEntry withOriginalLanguage(String originalLanguage) {
-this.originalLanguage = originalLanguage;
-return this;
-}
-
-/**
-*
-* @return
-* The originalTitle
-*/
 public String getOriginalTitle() {
-return originalTitle;
+    return originalTitle;
 }
 
-/**
-*
-* @param originalTitle
-* The original_title
-*/
 public void setOriginalTitle(String originalTitle) {
-this.originalTitle = originalTitle;
+    this.originalTitle = originalTitle;
 }
 
-public MovieEntry withOriginalTitle(String originalTitle) {
-this.originalTitle = originalTitle;
-return this;
-}
-
-/**
-*
-* @return
-* The overview
-*/
 public String getOverview() {
-return overview;
+    return overview;
 }
 
-/**
-*
-* @param overview
-* The overview
-*/
 public void setOverview(String overview) {
-this.overview = overview;
+    this.overview = overview;
 }
 
-public MovieEntry withOverview(String overview) {
-this.overview = overview;
-return this;
-}
-
-/**
-*
-* @return
-* The popularity
-*/
 public double getPopularity() {
-return popularity;
+    return popularity;
 }
 
-/**
-*
-* @param popularity
-* The popularity
-*/
 public void setPopularity(double popularity) {
-this.popularity = popularity;
+    this.popularity = popularity;
 }
 
-public MovieEntry withPopularity(double popularity) {
-this.popularity = popularity;
-return this;
-}
-
-/**
-*
-* @return
-* The posterPath
-*/
 public String getPosterPath() {
-return posterPath;
+    return posterPath;
 }
 
-/**
-*
-* @param posterPath
-* The poster_path
-*/
 public void setPosterPath(String posterPath) {
-this.posterPath = posterPath;
+    this.posterPath = posterPath;
 }
 
-public MovieEntry withPosterPath(String posterPath) {
-this.posterPath = posterPath;
-return this;
-}
-
-/**
-*
-* @return
-* The releaseDate
-*/
 public String getReleaseDate() {
-return releaseDate;
+    return releaseDate;
 }
 
-/**
-*
-* @param releaseDate
-* The release_date
-*/
 public void setReleaseDate(String releaseDate) {
-this.releaseDate = releaseDate;
+    this.releaseDate = releaseDate;
 }
 
-public MovieEntry withReleaseDate(String releaseDate) {
-this.releaseDate = releaseDate;
-return this;
-}
-
-/**
-*
-* @return
-* The title
-*/
 public String getTitle() {
-return title;
+    return title;
 }
 
-/**
-*
-* @param title
-* The title
-*/
 public void setTitle(String title) {
-this.title = title;
+    this.title = title;
 }
 
-public MovieEntry withTitle(String title) {
-this.title = title;
-return this;
-}
-
-/**
-*
-* @return
-* The video
-*/
 public boolean isVideo() {
-return video;
+    return video;
 }
 
-/**
-*
-* @param video
-* The video
-*/
 public void setVideo(boolean video) {
-this.video = video;
+    this.video = video;
 }
 
-public MovieEntry withVideo(boolean video) {
-this.video = video;
-return this;
-}
-
-/**
-*
-* @return
-* The voteAverage
-*/
 public double getVoteAverage() {
-return voteAverage;
+    return voteAverage;
 }
 
-/**
-*
-* @param voteAverage
-* The vote_average
-*/
 public void setVoteAverage(double voteAverage) {
-this.voteAverage = voteAverage;
+    this.voteAverage = voteAverage;
 }
 
-public MovieEntry withVoteAverage(double voteAverage) {
-this.voteAverage = voteAverage;
-return this;
-}
-
-/**
-*
-* @return
-* The voteCount
-*/
 public int getVoteCount() {
-return voteCount;
+    return voteCount;
 }
 
-/**
-*
-* @param voteCount
-* The vote_count
-*/
 public void setVoteCount(int voteCount) {
-this.voteCount = voteCount;
+    this.voteCount = voteCount;
 }
 
-public MovieEntry withVoteCount(int voteCount) {
-    this.voteCount = voteCount;
-    return this;
+public void setType(int type) {
+    this.type = type;
 }
+
+public int getType() {
+    return type;
+}
+
 }

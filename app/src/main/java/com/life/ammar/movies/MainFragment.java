@@ -49,8 +49,8 @@ public class MainFragment extends Fragment {
             order_by += "vote_average.desc";
         }
         new loadMovies(getContext())
-                .execute("https://api.themoviedb.org/3/discover/movie?" + order_by +
-                        getResources().getString(R.string.apiKey));
+                .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", order_by,
+                        getResources().getString(R.string.apiKey)});
     }
 
 }
