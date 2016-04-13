@@ -1,16 +1,21 @@
 package com.life.ammar.movies;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 /**
@@ -18,7 +23,9 @@ import android.widget.Toast;
  */
 public class MainFragment extends Fragment {
     SharedPreferences sharedPreferences;
-    public static GridView moviesGrid;
+    public RecyclerView recyclerView;
+    MoviesAdapter moviesAdapter;
+    List<Movie> movieList;
     public MainFragment() {
     }
 
@@ -27,15 +34,25 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View viewRoot = inflater.inflate(R.layout.fragment_main, container, false);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        moviesGrid = (GridView) viewRoot.findViewById(R.id.grid_movies);
-        moviesGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getContext(), Details.class);
-                intent.putExtra("IDAsInt", MoviesAdapter.movies[position].getId());
-                startActivity(intent);
-            }
-        });
+        recyclerView = (RecyclerView) viewRoot.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        movieList = new ArrayList<>();
+        Realm realm = Realm.getInstance(getContext());
+        RealmResults<MovieEntry> results = realm.where(MovieEntry.class).findAll();
+        for (int i=0; i<results.size(); i++) {
+            MovieEntry movieEntry = results.get(i);
+            Movie movie = null;
+            try {
+                // w92", "w154", "w185", "w342", "w500", "w780", or "original"
+                movie = new Movie(new URL(" http://image.tmdb.org/t/p/" + "w185" + movieEntry.getPosterPath()), movieEntry.getId());
+            } catch (MalformedURLException e) {}
+            movieList.add(movie);
+        }
+
+        moviesAdapter = new MoviesAdapter(movieList, getContext());
+        recyclerView.setAdapter(moviesAdapter);
+
         return viewRoot;
     }
 

@@ -1,26 +1,53 @@
 package com.life.ammar.movies;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class MovieEntry extends RealmObject {
+@SerializedName("adult")
+@Expose
 private boolean adult;
-@Required
+@SerializedName("backdrop_path")
+@Expose
 private String backdropPath;
 @PrimaryKey
+@SerializedName("id")
+@Expose
 private int id;
-@Required
+@SerializedName("original_language")
+@Expose
 private String originalLanguage;
+@SerializedName("original_title")
+@Expose
 private String originalTitle;
+@SerializedName("overview")
+@Expose
 private String overview;
+@SerializedName("popularity")
+@Expose
 private double popularity;
+@SerializedName("poster_path")
+@Expose
 private String posterPath;
+@SerializedName("release_date")
+@Expose
 private String releaseDate;
+@SerializedName("title")
+@Expose
 private String title;
+@SerializedName("video")
+@Expose
 private boolean video;
+@SerializedName("vote_average")
+@Expose
 private double voteAverage;
+@SerializedName("vote_count")
+@Expose
 private int voteCount;
 private int type; // 0 for popularity and 1 for votes
 
