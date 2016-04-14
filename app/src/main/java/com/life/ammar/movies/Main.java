@@ -1,7 +1,9 @@
 package com.life.ammar.movies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class Main extends AppCompatActivity {
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +25,7 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 
     @Override
@@ -52,7 +47,21 @@ public class Main extends AppCompatActivity {
             startActivity(new Intent(getBaseContext(), settingActivity.class));
             return true;
         }
+        if (id == R.id.loadMovies) {
+            loadMoviesF();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void loadMoviesF() {
+        String order_by = "sort_by=";
+        if(sharedPreferences.getString("OrderBy","Most Popular").equals("Most Popular")) {
+            order_by += "popularity.desc";
+        } else {
+            order_by += "vote_average.desc";
+        }
+        new loadMovies(getBaseContext())
+                .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", order_by,
+                        getResources().getString(R.string.apiKey)});
     }
 }

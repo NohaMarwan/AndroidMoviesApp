@@ -1,6 +1,7 @@
 package com.life.ammar.movies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
     private List<Movie> movieList;
     private Context context;
-
     public MoviesAdapter(List<Movie> movieList, Context context) {
         this.movieList = movieList;
         this.context = context;
@@ -24,8 +24,17 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
     @Override
     public MovieHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
+        final View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.movie_grid_item, parent, false);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, Details.class);
+                intent.putExtra("idAsInt",
+                        movieList.get(MainFragment.recyclerView.getChildAdapterPosition(itemView)).getId());
+                context.startActivity(intent);
+            }
+        });
         return new MovieHolder(itemView);
     }
 

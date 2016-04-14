@@ -63,10 +63,13 @@ public class loadMovies extends AsyncTask<String, Void, Void> {
             for (int i=0; i<jsonArray.size(); i++) {
                 realm.beginTransaction();
                 MovieEntry movieEntry = gson.fromJson(jsonArray.get(i), MovieEntry.class);
-                if(params[1].equals("popularity.desc")) {
+                if(params[1].equals("sort_by=popularity.desc")) {
                     movieEntry.setType(0);
                 } else {
                     movieEntry.setType(1);
+                }
+                if (realm.where(MovieEntry.class).equalTo("id",movieEntry.getId()).findFirst() == null) {
+                    movieEntry.setFavourite(false);
                 }
                 realm.copyToRealmOrUpdate(movieEntry);
                 realm.commitTransaction();

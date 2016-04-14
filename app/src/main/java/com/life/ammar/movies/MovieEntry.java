@@ -50,7 +50,7 @@ private double voteAverage;
 @Expose
 private int voteCount;
 private int type; // 0 for popularity and 1 for votes
-
+private boolean favourite;
 public MovieEntry() {}
 
 public MovieEntry(boolean adult, String backdropPath, int id,
@@ -187,5 +187,13 @@ public void setType(int type) {
 public int getType() {
     return type;
 }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
+    public boolean getFavourite() {
+        return favourite;
+    }
 
 }

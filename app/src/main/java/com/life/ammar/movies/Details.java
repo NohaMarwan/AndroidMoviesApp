@@ -6,6 +6,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
+
+import io.realm.Realm;
 
 public class Details extends AppCompatActivity {
 
@@ -20,8 +23,14 @@ public class Details extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Realm realm = Realm.getInstance(getBaseContext());
+                MovieEntry m = realm.where(MovieEntry.class).equalTo("id",
+                        getIntent().getExtras().getInt("idAsInt")).findFirst();
+                realm.beginTransaction();
+                m.setFavourite(!m.getFavourite());
+                realm.copyToRealmOrUpdate(m);
+                realm.commitTransaction();
+                Toast.makeText(getBaseContext(),"Fav is now: " + m.getFavourite(), Toast.LENGTH_LONG).show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
