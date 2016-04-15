@@ -62,6 +62,6 @@ public class Main extends AppCompatActivity {
         }
         new loadMovies(getBaseContext())
                 .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", order_by,
-                        getResources().getString(R.string.apiKey)});
+                        "&" + getResources().getString(R.string.apiKey)});
     }
 }

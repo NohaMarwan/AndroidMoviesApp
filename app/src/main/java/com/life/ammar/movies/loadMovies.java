@@ -73,6 +73,93 @@ public class loadMovies extends AsyncTask<String, Void, Void> {
                 }
                 realm.copyToRealmOrUpdate(movieEntry);
                 realm.commitTransaction();
+                // Add trailers
+                {
+                    String jsonT = null;
+                    try {
+                        URL urlT = new URL("https://api.themoviedb.org/3/movie/" + movieEntry.getId()
+                                + "/trailers?" + params[2]);
+                        HttpURLConnection httpURLConnectionT = (HttpURLConnection) urlT.openConnection();
+                        httpURLConnectionT.setRequestMethod("GET");
+                        httpURLConnectionT.connect();
+                        InputStream inputStreamT = httpURLConnectionT.getInputStream();
+                        BufferedReader bufferedReaderT = new BufferedReader(new InputStreamReader(inputStreamT));
+                        StringBuffer stringBufferT = new StringBuffer();
+                        String lineT;
+                        while ((lineT = bufferedReaderT.readLine()) != null) {
+                            stringBufferT.append(lineT + '\n');
+                        }
+                        jsonT = stringBufferT.toString();
+                    } catch (MalformedURLException e) {
+                    } catch (IOException e) {
+                    } catch (Exception e) {
+                    }
+                    if (jsonT != null) {
+                        Gson gsonT = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                            @Override
+                            public boolean shouldSkipField(FieldAttributes f) {
+                                return f.getDeclaringClass().equals(RealmObject.class);
+                            }
+
+                            @Override
+                            public boolean shouldSkipClass(Class<?> clazz) {
+                                return false;
+                            }
+                        }).create();
+                        JsonArray jsonArrayT = new JsonParser().parse(jsonT).getAsJsonObject().getAsJsonArray("youtube");
+                        Realm realmT = Realm.getInstance(context);
+                        for (int iT=0; iT<jsonArrayT.size(); iT++) {
+                            realmT.beginTransaction();
+                            MovieTrailer movieTrailer = gsonT.fromJson(jsonArrayT.get(iT), MovieTrailer.class);
+                            movieTrailer.setId(movieEntry.getId());
+                            realmT.copyToRealmOrUpdate(movieTrailer);
+                            realmT.commitTransaction();
+                        }
+                    }
+                }
+                {
+                    String jsonR = null;
+                    try {
+                        URL urlR = new URL("https://api.themoviedb.org/3/movie/" + movieEntry.getId()
+                                + "/reviews?" + params[2]);
+                        HttpURLConnection httpURLConnectionR = (HttpURLConnection) urlR.openConnection();
+                        httpURLConnectionR.setRequestMethod("GET");
+                        httpURLConnectionR.connect();
+                        InputStream inputStreamR = httpURLConnectionR.getInputStream();
+                        BufferedReader bufferedReaderR = new BufferedReader(new InputStreamReader(inputStreamR));
+                        StringBuffer stringBufferR = new StringBuffer();
+                        String lineR;
+                        while ((lineR = bufferedReaderR.readLine()) != null) {
+                            stringBufferR.append(lineR + '\n');
+                        }
+                        jsonR = stringBufferR.toString();
+                    } catch (MalformedURLException e) {
+                    } catch (IOException e) {
+                    } catch (Exception e) {
+                    }
+                    if (jsonR != null) {
+                        Gson gsonR = new GsonBuilder().setExclusionStrategies(new ExclusionStrategy() {
+                            @Override
+                            public boolean shouldSkipField(FieldAttributes f) {
+                                return f.getDeclaringClass().equals(RealmObject.class);
+                            }
+
+                            @Override
+                            public boolean shouldSkipClass(Class<?> clazz) {
+                                return false;
+                            }
+                        }).create();
+                        JsonArray jsonArrayR = new JsonParser().parse(jsonR).getAsJsonObject().getAsJsonArray("results");
+                        Realm realmR = Realm.getInstance(context);
+                        for (int iR=0; iR<jsonArrayR.size(); iR++) {
+                            realmR.beginTransaction();
+                            MovieReview movieReview = gsonR.fromJson(jsonArrayR.get(iR), MovieReview.class);
+                            movieReview.setMovieId(movieEntry.getId());
+                            realmR.copyToRealmOrUpdate(movieReview);
+                            realmR.commitTransaction();
+                        }
+                    }
+                }
             }
         }
         return null;
