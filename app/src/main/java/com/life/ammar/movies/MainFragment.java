@@ -1,15 +1,21 @@
 package com.life.ammar.movies;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -28,6 +34,7 @@ public class MainFragment extends Fragment {
     List<Movie> movieList;
     Realm realm;
     RealmResults<MovieEntry> results;
+    static FragmentTransaction Gtransaction;
     public MainFragment() {}
 
     @Override
@@ -42,6 +49,27 @@ public class MainFragment extends Fragment {
         realm = Realm.getInstance(getContext());
         moviesAdapter = new MoviesAdapter(movieList, getContext());
         recyclerView.setAdapter(moviesAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                Gtransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                /*Bundle args = new Bundle();
+                args.putInt("idAsInt", getActivity().
+                        getSharedPreferences("sp", Context.MODE_PRIVATE).getInt("idAsInt", 0));
+                DetailsFragment detailsFragment = new DetailsFragment();
+                detailsFragment.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().
+                        replace(R.id.container2, detailsFragment).commit();*/
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+        });
         return viewRoot;
     }
 
@@ -89,6 +117,7 @@ public class MainFragment extends Fragment {
         }
         moviesAdapter.notifyDataSetChanged();
     }
+
     public void loadMovies() {
         String order_by = "sort_by=";
         if(sharedPreferences.getString("OrderBy","Most Popular").equals("Most Popular")) {

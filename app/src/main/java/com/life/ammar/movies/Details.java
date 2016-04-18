@@ -3,6 +3,7 @@ package com.life.ammar.movies;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -18,8 +19,16 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Realm realm = Realm.getInstance(this);
+        MovieEntry movieEntry = realm.where(MovieEntry.class).findFirst();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        DetailsFragment detailFragment=new DetailsFragment();
+        Bundle args = new Bundle();
+        args.putInt("idAsInt", getIntent().getExtras().getInt("idAsInt"));
+        detailFragment.setArguments(args);
+        transaction.add(R.id.container2, detailFragment);
+        transaction.commit();
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,7 +41,7 @@ public class Details extends AppCompatActivity {
                 realm.commitTransaction();
                 Toast.makeText(getBaseContext(),"Fav is now: " + m.getFavourite(), Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

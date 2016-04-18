@@ -2,6 +2,7 @@ package com.life.ammar.movies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
 
     private List<Movie> movieList;
     private Context context;
+    private boolean isTablet = Main.isTablet();
     public MoviesAdapter(List<Movie> movieList, Context context) {
         this.movieList = movieList;
         this.context = context;
@@ -29,10 +31,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, Details.class);
-                intent.putExtra("idAsInt",
-                        movieList.get(MainFragment.recyclerView.getChildAdapterPosition(itemView)).getId());
-                context.startActivity(intent);
+                if(isTablet) {
+                    context.getSharedPreferences("sp",Context.MODE_PRIVATE).edit().
+                            putInt("idAsInt", movieList.get(MainFragment.recyclerView.
+                                    getChildAdapterPosition(itemView)).getId()).commit();
+                    DetailsFragment detailsFragment = new DetailsFragment();
+                    Bundle args = new Bundle();
+                    args.putInt("idAsInt",
+                            movieList.get(MainFragment.recyclerView.getChildAdapterPosition(itemView)).getId());
+                    detailsFragment.setArguments(args);
+                    MainFragment.Gtransaction.replace(R.id.container2, detailsFragment);
+                    MainFragment.Gtransaction.commit();
+                } else {
+                    Intent intent = new Intent(context, Details.class);
+                    intent.putExtra("idAsInt",
+                            movieList.get(MainFragment.recyclerView.getChildAdapterPosition(itemView)).getId());
+                    context.startActivity(intent);
+                }
             }
         });
         return new MovieHolder(itemView);
