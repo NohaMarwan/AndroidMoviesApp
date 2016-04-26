@@ -19,8 +19,6 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Realm realm = Realm.getInstance(this);
-        MovieEntry movieEntry = realm.where(MovieEntry.class).findFirst();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         DetailsFragment detailFragment=new DetailsFragment();
         Bundle args = new Bundle();
@@ -28,20 +26,6 @@ public class Details extends AppCompatActivity {
         detailFragment.setArguments(args);
         transaction.add(R.id.container2, detailFragment);
         transaction.commit();
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Realm realm = Realm.getInstance(getBaseContext());
-                MovieEntry m = realm.where(MovieEntry.class).equalTo("id",
-                        getIntent().getExtras().getInt("idAsInt")).findFirst();
-                realm.beginTransaction();
-                m.setFavourite(!m.getFavourite());
-                realm.copyToRealmOrUpdate(m);
-                realm.commitTransaction();
-                Toast.makeText(getBaseContext(),"Fav is now: " + m.getFavourite(), Toast.LENGTH_LONG).show();
-            }
-        });*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

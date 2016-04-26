@@ -32,9 +32,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieHolde
             @Override
             public void onClick(View v) {
                 if(isTablet) {
-                    context.getSharedPreferences("sp",Context.MODE_PRIVATE).edit().
-                            putInt("idAsInt", movieList.get(MainFragment.recyclerView.
-                                    getChildAdapterPosition(itemView)).getId()).commit();
                     DetailsFragment detailsFragment = new DetailsFragment();
                     Bundle args = new Bundle();
                     args.putInt("idAsInt",

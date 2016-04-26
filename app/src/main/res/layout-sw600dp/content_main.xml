@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="horizontal">
-    <FrameLayout
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.life.ammar.movies.MainFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/container1">
-    </FrameLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:layout="@layout/fragment_main" />
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

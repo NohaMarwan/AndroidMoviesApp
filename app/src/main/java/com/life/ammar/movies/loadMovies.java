@@ -1,7 +1,11 @@
 package com.life.ammar.movies;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
+
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -17,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import io.realm.Realm;
 import io.realm.RealmObject;
+import io.realm.RealmResults;
 
 /**
  * Created by ammar on 20/03/16.
@@ -168,5 +173,48 @@ public class loadMovies extends AsyncTask<String, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Realm realm = Realm.getInstance(context);
+        RealmResults<MovieEntry> results;
+        MainFragment.movieList.clear();
+        // If arranged with most popular
+        if(sharedPreferences.getString("OrderBy","Most Popular").equals("Most Popular")) {
+            results = realm.where(MovieEntry.class).equalTo("type",0).findAll();
+            for (int i=0; i<results.size(); i++) {
+                MovieEntry movieEntry = results.get(i);
+                Movie movie = null;
+                try {
+                    // w92", "w154", "w185", "w342", "w500", "w780", or "original"
+                    movie = new Movie(new URL("http://image.tmdb.org/t/p/" + "w500" + movieEntry.getPosterPath()), movieEntry.getId());
+                } catch (MalformedURLException e) {}
+                MainFragment.movieList.add(movie);
+            } // If favourite movies displaying
+        } else if(sharedPreferences.getString("OrderBy","Most Popular").equals("Favourites")) {
+            results = realm.where(MovieEntry.class).equalTo("favourite",true).findAll();
+            if(results.size()<1) {
+                Toast.makeText(context, "There is no favourite yet", Toast.LENGTH_SHORT).show();
+            }
+            for (int i=0; i<results.size(); i++) {
+                MovieEntry movieEntry = results.get(i);
+                Movie movie = null;
+                try {
+                    // w92", "w154", "w185", "w342", "w500", "w780", or "original"
+                    movie = new Movie(new URL("http://image.tmdb.org/t/p/" + "w500" + movieEntry.getPosterPath()), movieEntry.getId());
+                } catch (MalformedURLException e) {}
+                MainFragment.movieList.add(movie);
+            } // If arranged with ordering by
+        } else {
+            results = realm.where(MovieEntry.class).equalTo("type",1).findAll();
+            for (int i=0; i<results.size(); i++) {
+                MovieEntry movieEntry = results.get(i);
+                Movie movie = null;
+                try {
+                    // w92", "w154", "w185", "w342", "w500", "w780", or "original"
+                    movie = new Movie(new URL("http://image.tmdb.org/t/p/" + "w500" + movieEntry.getPosterPath()), movieEntry.getId());
+                } catch (MalformedURLException e) {}
+                MainFragment.movieList.add(movie);
+            }
+        }
+        MainFragment.moviesAdapter.notifyDataSetChanged();
     }
 }

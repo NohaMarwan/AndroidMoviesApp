@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.life.ammar.movies.DetailsFragment"
-    tools:showIn="@layout/details">
+    tools:showIn="@layout/details"
+    android:weightSum="1">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -16,26 +17,35 @@
                 android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitStart"
+                android:scaleType="centerCrop"
+                android:background="#CCCCCC"
                 android:id="@+id/backIV"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:textColor="#252112"
                 android:id="@+id/titleTextView"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:textColor="#252125"
                 android:id="@+id/releaseDateTextView"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_fav"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/favouriteImage"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@mipmap/vote_star"
+                android:textColor="@color/colorPrimaryDark"
                 android:id="@+id/voteAvgTextView"/>
             <TextView
                 android:layout_marginTop="10dp"
@@ -44,6 +54,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:textColor="#131535"
                 android:id="@+id/overviewTextView"/>
             <ImageView
                 android:layout_width="wrap_content"
@@ -53,13 +64,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Run Trailer"
+                android:textColor="#923635"
                 android:drawableLeft="@android:drawable/ic_media_play"
                 android:id="@+id/trailerTV"/>
-            <ListView
-                android:layout_width="wrap_content"
+            <ScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-            </ListView>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:id="@+id/reviewsList"
+                        android:layout_weight=".4">
+                    </ListView>
+                    </LinearLayout>
+            </ScrollView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
