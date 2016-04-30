@@ -84,18 +84,18 @@ public class Main extends AppCompatActivity {
             order_by += "popularity.desc";
             new loadMovies(getBaseContext())
                     .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", order_by,
-                            "&" + getResources().getString(R.string.apiKey)});
+                            "&api_key=" + getResources().getString(R.string.apiKey)});
             new loadMovies(getBaseContext())
                     .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", "sort_by=vote_average.desc",
-                            "&" + getResources().getString(R.string.apiKey)});
+                            "&api_key=" + getResources().getString(R.string.apiKey)});
         } else {
             order_by += "vote_average.desc";
             new loadMovies(getBaseContext())
                     .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", order_by,
-                            "&" + getResources().getString(R.string.apiKey)});
+                            "&api_key=" + getResources().getString(R.string.apiKey)});
             new loadMovies(getBaseContext())
                     .execute(new String[]{"https://api.themoviedb.org/3/discover/movie?", "sort_by=popularity.desc",
-                            "&" + getResources().getString(R.string.apiKey)});
+                            "&api_key=" + getResources().getString(R.string.apiKey)});
         }
     }
 
